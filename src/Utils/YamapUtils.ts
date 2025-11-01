@@ -1,4 +1,5 @@
 import { Platform, NativeModules } from 'react-native';
+import type { CameraPosition, Point } from '../@types';
 
 const LINKING_ERROR =
   `The package 'react-native-yamap-lite' doesn't seem to be linked. Make sure: \n\n` +
@@ -6,11 +7,26 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
+interface IYamapUtilsModule {
+  getCameraPosition(viewId: number): Promise<CameraPosition>;
+  setZoom(viewId: number, zoom: number): Promise<void>;
+  setCenter(
+    viewId: number,
+    latitude: number,
+    longitude: number,
+    zoom: number,
+    azimuth: number,
+    tilt: number,
+    animationDuration: number
+  ): Promise<void>;
+  fitAllMarkers(viewId: number, points: Point[]): Promise<void>;
+}
+
 const YamapUtilsModule = true
   ? require('../NativeYamapUtils').default
   : NativeModules.TurboExample;
 
-export const YamapUtils = YamapUtilsModule
+export const YamapUtils: IYamapUtilsModule = YamapUtilsModule
   ? YamapUtilsModule
   : new Proxy(
       {},

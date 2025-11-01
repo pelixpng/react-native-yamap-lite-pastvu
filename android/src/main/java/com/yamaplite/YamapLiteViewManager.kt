@@ -3,14 +3,14 @@ package com.yamaplite
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.SimpleViewManager
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.YamapLiteViewManagerInterface
 import com.facebook.react.viewmanagers.YamapLiteViewManagerDelegate
+import android.view.View
 
-
-class YamapLiteViewManager : SimpleViewManager<YamapLiteView>(), YamapLiteViewManagerInterface<YamapLiteView> {
+class YamapLiteViewManager : ViewGroupManager<YamapLiteView>(), YamapLiteViewManagerInterface<YamapLiteView> {
   private val mDelegate: ViewManagerDelegate<YamapLiteView>
 
   init {
@@ -19,8 +19,24 @@ class YamapLiteViewManager : SimpleViewManager<YamapLiteView>(), YamapLiteViewMa
 
   override fun getDelegate(): ViewManagerDelegate<YamapLiteView> = mDelegate
 
-  public override fun createViewInstance(context: ThemedReactContext): YamapLiteView {
+  override fun createViewInstance(context: ThemedReactContext): YamapLiteView {
     return YamapLiteView(context)
+  }
+
+  override fun addView(parent: YamapLiteView, child: View, index: Int) {
+    parent.addReactChild(child, index)
+  }
+
+  override fun getChildAt(parent: YamapLiteView, index: Int): View {
+    return parent.getReactChildAt(index)
+  }
+
+  override fun getChildCount(parent: YamapLiteView): Int {
+    return parent.getReactChildCount()
+  }
+
+  override fun removeViewAt(parent: YamapLiteView, index: Int) {
+    parent.removeReactChildAt(index)
   }
 
   override fun getName() = "YamapLiteView"
@@ -136,25 +152,5 @@ class YamapLiteViewManager : SimpleViewManager<YamapLiteView>(), YamapLiteViewMa
       if (value.hasKey("horizontal")) padding["horizontal"] = value.getDouble("horizontal")
       view.setLogoPadding(padding)
     }
-  }
-
-  override fun getCameraPosition(view: YamapLiteView) {
-    // Этот метод вызывается как команда, результат отправляется через YamapUtils
-  }
-
-  override fun reload(view: YamapLiteView) {
-    view.reload()
-  }
-
-  override fun setCenter(view: YamapLiteView, latitude: Double, longitude: Double, zoom: Float, azimuth: Float, tilt: Float, duration: Float) {
-    view.setCenter(latitude, longitude, zoom, azimuth, tilt, duration)
-  }
-
-  override fun setZoom(view: YamapLiteView, zoom: Float) {
-    view.setZoom(zoom)
-  }
-
-  override fun fitAllMarkers(view: YamapLiteView) {
-    view.fitAllMarkers()
   }
 }
