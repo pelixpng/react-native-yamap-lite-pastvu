@@ -24,13 +24,14 @@ class ResolveImageHelper {
     private val inProgressRequests = mutableMapOf<String, MutableList<PlacemarkMapObject>>()
 
     suspend fun resolveImage(context: Context, url: String, iconSize: Int): ImageProvider? = withContext(Dispatchers.IO) {
-        var icon: ImageProvider? = null
         // 1. Проверка кэша - всегда ресайзим изображение из кэша под нужный размер
+        Log.d("ImageLoader", "Checking cache for: $url")
         MarkerImageCache.get(url)?.let { cachedBitmap ->
             Log.d("ImageLoader", "Loaded from cache: $url")
             val resizedBitmap = resizeBitmap(context, cachedBitmap, iconSize) ?: cachedBitmap
             return@withContext ImageProvider.fromBitmap(resizedBitmap)
         }
+        Log.d("ImageLoader", "Cache miss, trying other sources for: $url")
 
         // 2. Проверяем как ресурс Android (для React Native ассетов в res/drawable-*)
         val resId = context.resources.getIdentifier(url, "drawable", context.packageName)
