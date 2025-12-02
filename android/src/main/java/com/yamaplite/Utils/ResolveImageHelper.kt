@@ -1,6 +1,6 @@
 package com.yamaplite.utils
 
-import com.yamaplite.utils.MarkerImageCache
+import com.yamaplite.utils.ImageCache
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.mapkit.map.PlacemarkMapObject
 import android.util.Log
@@ -23,10 +23,20 @@ import kotlin.coroutines.resume
 class ResolveImageHelper {
     private val inProgressRequests = mutableMapOf<String, MutableList<PlacemarkMapObject>>()
 
+    companion object {
+        private var instance: ResolveImageHelper? = null
+        fun getInstance(): ResolveImageHelper {
+            if (instance == null) {
+                instance = ResolveImageHelper()
+            }
+            return instance!!
+        }
+    }
+
     suspend fun resolveImage(context: Context, url: String, iconSize: Int): ImageProvider? = withContext(Dispatchers.IO) {
         // 1. Проверка кэша - всегда ресайзим изображение из кэша под нужный размер
         Log.d("ImageLoader", "Checking cache for: $url")
-        MarkerImageCache.get(url)?.let { cachedBitmap ->
+        ImageCache.get(url)?.let { cachedBitmap ->
             Log.d("ImageLoader", "Loaded from cache: $url")
             val resizedBitmap = resizeBitmap(context, cachedBitmap, iconSize) ?: cachedBitmap
             return@withContext ImageProvider.fromBitmap(resizedBitmap)
@@ -39,7 +49,7 @@ class ResolveImageHelper {
             try {
                 val bmp = BitmapFactory.decodeResource(context.resources, resId)
                 val resized = resizeBitmap(context, bmp, iconSize)
-                MarkerImageCache.put(url, resized ?: bmp)
+                ImageCache.put(url, resized ?: bmp)
                 Log.d("ImageLoader", "Loaded from resources: $url")
                 return@withContext ImageProvider.fromBitmap(resized ?: bmp)
             } catch (e: Exception) {
@@ -69,7 +79,7 @@ class ResolveImageHelper {
                             response.body?.byteStream()?.use { inputStream ->
                                 try {
                                     bitmap = BitmapFactory.decodeStream(inputStream)?.let { resizeBitmap(context, it, iconSize) }
-                                    bitmap?.let { MarkerImageCache.put(url, it) }
+                                    bitmap?.let { ImageCache.put(url, it) }
                                 } catch (e: Exception) {
                                     Log.e("ImageLoader", "Error decoding image: $url", e)
                                 } finally {

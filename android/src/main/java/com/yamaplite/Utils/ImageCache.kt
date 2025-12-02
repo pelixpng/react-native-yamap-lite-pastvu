@@ -5,7 +5,7 @@ import android.util.LruCache
 import android.util.Log
 import java.lang.Runtime
 
-object MarkerImageCache {
+object ImageCache {
 
   private val cacheSize = 50 * 1024 * 1024 // 50 МБ в байтах
 
@@ -19,9 +19,9 @@ object MarkerImageCache {
   fun get(url: String): Bitmap? {
     val bitmap = memoryCache.get(url)
     if (bitmap != null) {
-      Log.d("MarkerImageCache", "Cache HIT for: $url (size: ${bitmap.byteCount} bytes)")
+      Log.d("ImageCache", "Cache HIT for: $url (size: ${bitmap.byteCount} bytes)")
     } else {
-      Log.d("MarkerImageCache", "Cache MISS for: $url")
+      Log.d("ImageCache", "Cache MISS for: $url")
     }
     return bitmap
   }
@@ -30,7 +30,7 @@ object MarkerImageCache {
   fun put(url: String, bitmap: Bitmap) {
     val size = bitmap.byteCount
     memoryCache.put(url, bitmap)
-    Log.d("MarkerImageCache", "Cached image: $url (size: $size bytes, cache size: ${memoryCache.size()} bytes)")
+    Log.d("ImageCache", "Cached image: $url (size: $size bytes, cache size: ${memoryCache.size()} bytes)")
   }
 
   /** Проверка наличия Bitmap в кэше */

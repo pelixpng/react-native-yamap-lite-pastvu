@@ -127,10 +127,11 @@ class YamapLiteViewManager : ViewGroupManager<YamapLiteView>(), YamapLiteViewMan
   @ReactProp(name = "logoPadding")
   override fun setLogoPadding(view: YamapLiteView, value: ReadableMap?) {
     if (value != null) {
-      val padding = mutableMapOf<String, Any>()
-      if (value.hasKey("vertical")) padding["vertical"] = value.getDouble("vertical") ?: 0.0
-      if (value.hasKey("horizontal")) padding["horizontal"] = value.getDouble("horizontal") ?: 0.0
-      view.setLogoPadding(padding)
+      val horizontalPadding =
+        if ((value.hasKey("horizontal") && !value.isNull("horizontal"))) value.getInt("horizontal") else 0
+      val verticalPadding =
+        if ((value.hasKey("vertical") && !value.isNull("vertical"))) value.getInt("vertical") else 0
+      view.setLogoPadding(horizontalPadding, verticalPadding)
     }
   }
 

@@ -82,15 +82,15 @@ public protocol YamapViewComponentDelegate {
 
     @objc public func applyProperties() {
         if Thread.isMainThread {
-            updateProperties()
+            updateMapProperties()
         } else {
             DispatchQueue.main.async { [weak self] in
-                self?.updateProperties()
+                self?.updateMapProperties()
             }
         }
     }
     
-    private func updateProperties() {
+    private func updateMapProperties() {
         guard let map = mapView?.mapWindow?.map else { return }
         switch mapType {
         case "satellite": map.mapType = .satellite
@@ -108,8 +108,11 @@ public protocol YamapViewComponentDelegate {
         self.updateUserIcon();
     }
 
-    @objc public var maxFps: Float = 30 {
+    @objc public var maxFps: Float = 60 {
         didSet {
+            if(maxFps <= 0 || maxFps > 60) {
+                maxFps = 60
+            }
             guard let map = mapView?.mapWindow else { return }
             map.setMaxFpsWithFps(maxFps)
         }
@@ -201,12 +204,23 @@ public protocol YamapViewComponentDelegate {
     }
 
     @objc public func setUserLocationIcon(path: String) {
-        resolveUIImage(uri: path) { [weak self] image in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.userLocationImage = image
-                self.updateUserIcon()
+        let helper = ResolveImageHelper.shared
+        let baseSize: CGFloat = 50.0
+        
+        let image = helper.resolveUIImage(uri: path as NSString) { [weak self] loadedImage in
+            guard let self = self, let loadedImage = loadedImage else {
+                print("Failed to load image from URI: \(path)")
+                return
             }
+            let resizedImage = helper.resizeImage(loadedImage, toSize: CGSize(width: baseSize, height: baseSize))
+            self.userLocationImage = resizedImage
+            self.updateUserIcon()
+        }
+        
+        if let image = image {
+            let resizedImage = helper.resizeImage(image, toSize: CGSize(width: baseSize, height: baseSize))
+            userLocationImage = resizedImage
+            updateUserIcon()
         }
     }
 
@@ -282,7 +296,11 @@ public protocol YamapViewComponentDelegate {
     }
 
     static func isM1Simulator() -> Bool {
-        return (TARGET_IPHONE_SIMULATOR & TARGET_CPU_ARM64) != 0
+        #if targetEnvironment(simulator) && arch(arm64)
+        return true
+        #else
+        return false
+        #endif
     }
 
     @objc public func setCenter(

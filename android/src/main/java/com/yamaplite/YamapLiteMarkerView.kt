@@ -35,7 +35,7 @@ import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.EventDispatcher
 import com.facebook.react.uimanager.events.Event
-import com.yamaplite.utils.MarkerImageCache
+import com.yamaplite.utils.ImageCache
 import com.yamaplite.utils.ResolveImageHelper
 
 class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListener {
@@ -55,9 +55,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
 
   private var placemark: PlacemarkMapObject? = null
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
   private val inProgressRequests = mutableMapOf<String, MutableList<PlacemarkMapObject>>()
-
 
   private val childLayoutListener =
   OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom -> applyStyle() }
@@ -166,7 +164,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
           )
           val c = Canvas(b)
           _childView!!.draw(c)
-          val resizedBitmap = ResolveImageHelper().resizeBitmap(context, b, _size)
+          val resizedBitmap = ResolveImageHelper.getInstance().resizeBitmap(context, b, _size)
           (placemark as PlacemarkMapObject).setIcon(ImageProvider.fromBitmap(resizedBitmap))
           (placemark as PlacemarkMapObject).setIconStyle(iconStyle)
         } catch (e: Exception) {
@@ -177,7 +175,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
         val currentPlacemark = placemark as? PlacemarkMapObject
         val currentIconStyle = iconStyle
         coroutineScope.launch {
-          val icon = ResolveImageHelper().resolveImage(context, iconSource!!, _size)
+          val icon = ResolveImageHelper.getInstance().resolveImage(context, iconSource!!, _size)
           icon?.let {
             currentPlacemark?.let { pm ->
               if (pm.isValid) {

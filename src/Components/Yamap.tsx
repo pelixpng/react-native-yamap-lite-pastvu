@@ -26,6 +26,7 @@ export const YaMap = forwardRef(
       userLocationAccuracyFillColor = '#00FF00',
       userLocationAccuracyStrokeColor = '#000000',
       userLocationAccuracyStrokeWidth = 2,
+      userLocationIconScale = 1,
       ...otherProps
     } = props;
 
@@ -91,6 +92,7 @@ export const YaMap = forwardRef(
         userLocationAccuracyFillColor={userLocationAccuracyFillColor}
         userLocationAccuracyStrokeColor={userLocationAccuracyStrokeColor}
         userLocationAccuracyStrokeWidth={userLocationAccuracyStrokeWidth}
+        userLocationIconScale={userLocationIconScale}
         {...otherProps}
       />
     );

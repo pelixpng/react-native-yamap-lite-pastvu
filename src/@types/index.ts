@@ -43,6 +43,7 @@ export interface MarkerProps extends ViewProps {
 export interface YaMapProps extends ViewProps {
   userLocationIcon?: ImageSourcePropType;
 
+  /** @default 1 */
   userLocationIconScale?: number;
 
   /** @default false */

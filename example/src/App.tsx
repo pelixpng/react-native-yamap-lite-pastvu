@@ -38,10 +38,12 @@ export default function App() {
         //   uri: 'https://www.shutterstock.com/image-vector/user-location-icon-vector-graphics-260nw-1496198948.jpg',
         // }}
         userLocationIcon={require('./assets/user-pin.png')}
-        userLocationIconScale={2}
+        userLocationIconScale={1.5}
         userLocationAccuracyFillColor="#ff0000"
         userLocationAccuracyStrokeColor="#ff0000"
         userLocationAccuracyStrokeWidth={100}
+        logoPadding={{ horizontal: 100, vertical: 100 }}
+        logoPosition={{ horizontal: 'left', vertical: 'bottom' }}
       >
         {markers.map((marker, index) => (
           <Marker

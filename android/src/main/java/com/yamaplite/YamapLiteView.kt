@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.events.RCTModernEventEmitter
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
@@ -23,6 +24,10 @@ import com.yandex.mapkit.user_location.UserLocationView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 import com.yandex.mapkit.layers.ObjectEvent
+import com.yandex.mapkit.logo.Alignment
+import com.yandex.mapkit.logo.HorizontalAlignment
+import com.yandex.mapkit.logo.VerticalAlignment
+import com.yandex.mapkit.logo.Padding
 import android.view.View
 import android.os.Looper
 import android.os.Handler
@@ -170,17 +175,30 @@ class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener,
   }
 
   fun setLogoPosition(position: Map<String, Any>) {
-    val vertical = position["vertical"] as? String
-    val horizontal = position["horizontal"] as? String
-    if (vertical == null || horizontal == null) return
-    logoPosition = mapOf("vertical" to vertical, "horizontal" to horizontal)
+    var horizontalAlignment = HorizontalAlignment.RIGHT
+    var verticalAlignment = VerticalAlignment.BOTTOM
+
+    if (position.containsKey("horizontal")) {
+        when (position.get("horizontal")) {
+            "left" -> horizontalAlignment = HorizontalAlignment.LEFT
+            "center" -> horizontalAlignment = HorizontalAlignment.CENTER
+            else -> {}
+        }
+    }
+
+    if (position.containsKey("vertical")) {
+        when (position.get("vertical")) {
+            "top" -> verticalAlignment = VerticalAlignment.TOP
+            "bottom" -> verticalAlignment = VerticalAlignment.BOTTOM
+            else -> {}
+        }
+    }
+
+    mapView.getMapWindow().map.logo.setAlignment(Alignment(horizontalAlignment, verticalAlignment))
   }
   
-  fun setLogoPadding(padding: Map<String, Any>) {
-    val vertical = padding["vertical"] as? Double
-    val horizontal = padding["horizontal"] as? Double
-    if (vertical == null || horizontal == null) return
-    logoPadding = mapOf("vertical" to vertical.toInt(), "horizontal" to horizontal.toInt())
+  fun setLogoPadding(horizontalPadding: Int, verticalPadding: Int) {
+    mapView.getMapWindow().map.logo.setPadding(Padding(horizontalPadding, verticalPadding))
   }
   
   fun getCameraPosition(): WritableMap? {
@@ -455,7 +473,7 @@ class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener,
     val pin = userLocationView!!.pin
     val arrow = userLocationView!!.arrow
     coroutineScope.launch {
-      val icon = ResolveImageHelper().resolveImage(context, userLocationIcon!!, 25)
+      val icon = ResolveImageHelper.getInstance().resolveImage(context, userLocationIcon!!, 50)
       icon?.let {
         pin.setIcon(it, userIconStyle)
         arrow.setIcon(it, userIconStyle)

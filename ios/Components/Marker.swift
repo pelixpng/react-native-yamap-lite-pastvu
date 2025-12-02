@@ -106,13 +106,20 @@ public class YamapLiteMarker: UIView, MapObjectTapHandler {
     }
 
     @objc public func setIcon(uri: String) {
-        resolveUIImage(uri: uri) { image in
-            if let image = image {
-                self.originalIcon = image
-                self.updateMarker()
-            } else {
-                print("Failed to load image from URI: \(uri)")
+        let image = ResolveImageHelper.shared.resolveUIImage(uri: uri as NSString) { [weak self] loadedImage in
+            guard let self = self else {
+                return
             }
+            guard let loadedImage = loadedImage else {
+                return
+            }
+            self.originalIcon = loadedImage
+            self.updateMarker()
+        }
+        
+        if let image = image {
+            originalIcon = image
+            updateMarker()
         }
     }
 
@@ -125,39 +132,6 @@ public class YamapLiteMarker: UIView, MapObjectTapHandler {
             mapObject!.addTapListener(with: listener!)
             updateMarker()
         }
-    }
-
-    private func resizeImage(image: UIImage, targetSize: Int) -> UIImage? {
-        guard targetSize > 0 else { return image }
-        
-        // Convert points to pixels based on screen scale
-        // size comes from React Native in points, we need to convert to pixels
-        let screenScale = UIScreen.main.scale
-        let targetSizePx = CGFloat(targetSize) * screenScale
-        
-        // Get image size in pixels
-        let width = image.size.width * image.scale
-        let height = image.size.height * image.scale
-        
-        if abs(width - targetSizePx) < 1.0 && abs(height - targetSizePx) < 1.0 {
-            return image
-        }
-        
-        // Calculate scale to fit target size (maintain aspect ratio)
-        let maxDimension = max(width, height)
-        let scale = targetSizePx / maxDimension
-        let scaledWidth = width * scale
-        let scaledHeight = height * scale
-        
-        // Create new image with target size in pixels
-        let size = CGSize(width: scaledWidth, height: scaledHeight)
-        UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
-        image.draw(in: CGRect(origin: .zero, size: size))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        // Return image with screen scale to ensure proper display
-        return resizedImage?.withRenderingMode(.alwaysOriginal) ?? image
     }
 
     @objc public func updateMarker() {
@@ -178,7 +152,7 @@ public class YamapLiteMarker: UIView, MapObjectTapHandler {
             iconStyle.rotationType = NSNumber(value: YMKRotationType.rotate.rawValue)
 
             if let icon = originalIcon {
-                let resizedIcon = resizeImage(image: icon, targetSize: size)
+              let resizedIcon = ResolveImageHelper.shared.resizeImage(icon, toSize: CGSize(width: size, height: size))
                 obj.setIconWith(resizedIcon ?? icon)
                 obj.setIconStyleWith(iconStyle)
             }
