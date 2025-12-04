@@ -113,6 +113,15 @@ export interface YaMapProps extends ViewProps {
   logoPadding?: YandexLogoPadding;
 }
 
+export interface ClusteredYamapProps<T = any> extends YaMapProps {
+  clusteredMarkers: ReadonlyArray<{ point: Point; data: T }>;
+  renderMarker: (
+    info: { point: Point; data: T },
+    index: number
+  ) => React.ReactElement;
+  clusterColor?: string;
+}
+
 export interface Point {
   lat: number;
   lon: number;

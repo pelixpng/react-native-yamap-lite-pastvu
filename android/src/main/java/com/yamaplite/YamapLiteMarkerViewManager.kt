@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.YamapLiteMarkerViewManagerInterface
 import com.facebook.react.viewmanagers.YamapLiteMarkerViewManagerDelegate
+import com.yamaplite.components.YamapLiteMarkerView
 
 class YamapLiteMarkerViewManager : SimpleViewManager<YamapLiteMarkerView>(), YamapLiteMarkerViewManagerInterface<YamapLiteMarkerView> {
   private val mDelegate: ViewManagerDelegate<YamapLiteMarkerView>

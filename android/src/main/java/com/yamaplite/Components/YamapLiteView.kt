@@ -1,4 +1,4 @@
-package com.yamaplite
+package com.yamaplite.components
 
 import android.content.Context
 import android.graphics.Color
@@ -45,8 +45,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener, CameraListener, UserLocationObjectListener {
-  private val mapView: MapView = MapView(context)
+open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener, CameraListener, UserLocationObjectListener {
+  protected val mapView: MapView = MapView(context)
   private val reactChildren = mutableListOf<View>()
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -354,7 +354,10 @@ class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener,
     }
   }
 
-  fun getReactChildAt(index: Int): View {
+  fun getReactChildAt(index: Int): View? {
+    if (index < 0 || index >= reactChildren.size) {
+      return null
+    }
     return reactChildren[index]
   }
 
@@ -492,6 +495,27 @@ class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener,
       circle.strokeColor = Color.parseColor(userLocationAccuracyStrokeColor)
     }
     circle.strokeWidth = userLocationAccuracyStrokeWidth
+  }
+
+  fun fitMarkers(points: ArrayList<Point?>) {
+    if (points.size == 0) {
+      return
+    }
+    if (points.size == 1) {
+      val center = Point(
+        points[0]!!.latitude, points[0]!!.longitude
+      )
+      mapView.getMapWindow().map.move(CameraPosition(center, 15f, 0f, 0f))
+      return
+    }
+    var cameraPosition = mapView.getMapWindow().map.cameraPosition(Geometry.fromBoundingBox(calculateBoundingBox(points)))
+    cameraPosition = CameraPosition(
+      cameraPosition.target,
+      cameraPosition.zoom - 0.8f,
+      cameraPosition.azimuth,
+      cameraPosition.tilt
+    )
+    mapView.getMapWindow().map.move(cameraPosition, Animation(Animation.Type.SMOOTH, 0.7f), null)
   }
 
   override fun onObjectAdded(_userLocationView: UserLocationView) {

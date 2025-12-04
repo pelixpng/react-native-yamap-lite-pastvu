@@ -1,4 +1,4 @@
-package com.yamaplite
+package com.yamaplite.components
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -39,7 +39,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
   private var _size: Int = 25
   private var _childView: View? = null
 
-  private var placemark: PlacemarkMapObject? = null
+  var placemark: PlacemarkMapObject? = null
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
   private val inProgressRequests = mutableMapOf<String, MutableList<PlacemarkMapObject>>()
 

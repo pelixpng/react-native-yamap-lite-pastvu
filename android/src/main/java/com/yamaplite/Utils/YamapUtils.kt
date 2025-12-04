@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.fbreact.specs.NativeYamapUtilsSpec
-import com.yamaplite.YamapLiteView
+import com.yamaplite.components.YamapLiteView
 
 @ReactModule(name = NativeYamapUtilsSpec.NAME)
 class YamapUtils(reactContext: ReactApplicationContext): NativeYamapUtilsSpec(reactContext) {
