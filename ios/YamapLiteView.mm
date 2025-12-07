@@ -69,6 +69,7 @@ using namespace facebook::react;
         self->_view.userLocationAccuracyStrokeWidth = newViewProps.userLocationAccuracyStrokeWidth;
         self->_view.showUserPosition = newViewProps.showUserPosition;
         self->_view.userLocationIconScale = newViewProps.userLocationIconScale;
+        [self->_view setFollowUser:newViewProps.followUser];
         NSDictionary *logoPositionDict = @{
             @"horizontal": RCTNSStringFromString(toString(newViewProps.logoPosition.horizontal)),
             @"vertical": RCTNSStringFromString(toString(newViewProps.logoPosition.vertical))

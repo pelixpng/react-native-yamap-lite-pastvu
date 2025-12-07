@@ -80,7 +80,8 @@ export interface NativeProps extends ViewProps {
   initialRegion?: InitialRegion;
   maxFps?: Float;
   mapType?: WithDefault<'map' | 'satellite' | 'hybrid', 'map'>;
-  // followUser?: boolean;
+  /** @default false */
+  followUser?: boolean;
   logoPosition?: YandexLogoPosition;
   logoPadding?: YandexLogoPadding;
 }

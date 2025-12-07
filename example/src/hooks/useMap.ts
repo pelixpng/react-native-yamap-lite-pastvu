@@ -24,7 +24,7 @@ export const useMap = () => {
 
   const handleCenterMap = async () => {
     await mapRef.current?.setCenter(
-      { lat: 55.551244, lon: 36.518423 },
+      { lat: 55.8, lon: 37.5 },
       10,
       0,
       0,

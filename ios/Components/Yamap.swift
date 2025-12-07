@@ -106,6 +106,22 @@ public class YamapView: UIView {
         self.updateUserIcon();
     }
 
+    @objc public func setFollowUser(_ follow: Bool) {
+    if (userLocationLayer == nil) {
+        setupListeners()
+        }
+
+        if (follow) {
+            userLocationLayer.isAutoZoomEnabled = true
+            guard let mapView = mapView else { return }
+            let width = mapView.bounds.width
+            let height = mapView.bounds.height
+            userLocationLayer.setAnchorWithAnchorNormal(CGPoint(x: 0.5 * width, y: 0.5 * height), anchorCourse: CGPoint(x: 0.5 * width, y: 0.83 * height))
+        } else {
+            userLocationLayer.isAutoZoomEnabled = false
+            userLocationLayer.resetAnchor()
+        }
+    }
     @objc public var maxFps: Float = 60 {
         didSet {
             if(maxFps <= 0 || maxFps > 60) {

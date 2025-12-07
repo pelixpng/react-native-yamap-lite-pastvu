@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Bitmap
 import android.util.Log
+import android.graphics.PointF
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
@@ -83,19 +84,7 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
       LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     )
   }
-  
-  private fun setupUserLocation() {
 
-  }
-  
-  private fun setupLogo() {
-
-  }
-  
-  private fun addMapListeners() {
-
-  }
-  
   fun setUserLocationIcon(icon: String?) {
     userLocationIcon = icon
     if (userLocationView != null) {
@@ -300,7 +289,24 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
       Log.e("YamapLiteView", "Failed to fit all markers", e)
     }
   }
-  
+
+  fun setFollowUser(follow: Boolean) {
+    if (userLocationLayer == null) {
+      setShowUserPosition(true)
+    }
+
+    if (follow) {
+      userLocationLayer!!.isAutoZoomEnabled = true
+      userLocationLayer!!.setAnchor(
+          PointF((width * 0.5).toFloat(), (height * 0.5).toFloat()),
+          PointF((width * 0.5).toFloat(), (height * 0.83).toFloat())
+      )
+    } else {
+      userLocationLayer!!.isAutoZoomEnabled = false
+      userLocationLayer!!.resetAnchor()
+    }
+  }
+
   fun setUserLocationAccuracyFillColor(color: String?) {
     userLocationAccuracyFillColor = color ?: "#00FF00"
   }

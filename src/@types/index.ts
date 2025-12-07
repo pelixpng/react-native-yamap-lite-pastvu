@@ -106,7 +106,8 @@ export interface YaMapProps extends ViewProps {
 
   mapType?: 'map' | 'satellite' | 'hybrid';
 
-  // followUser?: boolean;
+  /** @default false */
+  followUser?: boolean;
 
   logoPosition?: YandexLogoPosition;
 

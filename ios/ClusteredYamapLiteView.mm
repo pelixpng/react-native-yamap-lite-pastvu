@@ -71,7 +71,7 @@ using namespace facebook::react;
         self->_view.showUserPosition = newViewProps.showUserPosition;
         self->_view.userLocationIconScale = newViewProps.userLocationIconScale;
         self->_view.clusterColor = [self hexStringToColor:RCTNSStringFromString(newViewProps.clusterColor)];
-        
+        [self->_view setFollowUser:newViewProps.followUser];
         // Convert std::vector<ClusteredYamapLiteViewClusteredMarkersStruct> to NSArray<NSDictionary *>
         NSMutableArray *markersArray = [NSMutableArray arrayWithCapacity:newViewProps.clusteredMarkers.size()];
         for (const auto &marker : newViewProps.clusteredMarkers) {
