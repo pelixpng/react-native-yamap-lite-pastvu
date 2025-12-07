@@ -1,5 +1,10 @@
 import React from 'react';
-import type { CameraPosition, MapLoaded, YaMapRef } from '../../../src/@types';
+import type {
+  CameraPosition,
+  MapLoaded,
+  Point,
+  YaMapRef,
+} from '../../../src/@types';
 
 export const useMap = () => {
   const mapRef = React.useRef<YaMapRef>(null);
@@ -49,6 +54,14 @@ export const useMap = () => {
     console.log('Camera position changed end', event.nativeEvent);
   };
 
+  const onMapPress = (event: Point) => {
+    console.log('Map pressed', event);
+  };
+
+  const onMapLongPress = (event: Point) => {
+    console.log('Map long pressed', event);
+  };
+
   return {
     mapRef,
     handleIncreaseZoom,
@@ -59,5 +72,7 @@ export const useMap = () => {
     onMapLoaded,
     onCameraPositionChange,
     onCameraPositionChangeEnd,
+    onMapPress,
+    onMapLongPress,
   };
 };

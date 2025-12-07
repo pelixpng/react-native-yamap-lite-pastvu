@@ -39,6 +39,7 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.Map as YMap
 import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.map.IconStyle
+import com.yandex.mapkit.map.InputListener
 import com.yamaplite.utils.ResolveImageHelper
 import com.yamaplite.components.YamapCircle
 import javax.annotation.Nonnull
@@ -46,7 +47,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener, CameraListener, UserLocationObjectListener {
+open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedListener, CameraListener, UserLocationObjectListener, InputListener {
   protected val mapView: MapView = MapView(context)
   private val reactChildren = mutableListOf<View>()
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -76,6 +77,7 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
     setupMap()
     mapView.mapWindow.map.setMapLoadedListener(this)
     mapView.mapWindow.map.addCameraListener(this)
+    mapView.mapWindow.map.addInputListener(this)
   }
   
   private fun setupMap() {
@@ -476,6 +478,38 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
     }
   }
 
+  override fun onMapTap(map: YMap, point: Point) {
+    val reactContext = context as? ReactContext
+    if (reactContext == null) {
+      return
+    }
+    val eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId())
+    if (eventDispatcher != null) {
+      val eventData = Arguments.createMap().apply {
+        putDouble("lat", point.latitude)
+        putDouble("lon", point.longitude)
+      }
+      val event = MapPressEvent(getId(), eventData)
+      eventDispatcher.dispatchEvent(event)
+    }
+  }
+
+  override fun onMapLongTap(map: YMap, point: Point) {
+    val reactContext = context as? ReactContext
+    if (reactContext == null) {
+      return
+    }
+    val eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, getId())
+    if (eventDispatcher != null) {
+      val eventData = Arguments.createMap().apply {
+        putDouble("lat", point.latitude)
+        putDouble("lon", point.longitude)
+      }
+      val event = MapLongPressEvent(getId(), eventData)
+      eventDispatcher.dispatchEvent(event)
+    }
+  }
+
   private fun updateUserLocationIcon() {
     if (userLocationView == null || userLocationIcon == null) {
       return
@@ -564,6 +598,30 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
   private class MapLoadEvent(viewTag: Int, private val eventData: WritableMap?) : Event<MapLoadEvent>(viewTag) {
     override fun getEventName(): String {
       return "onMapLoaded"
+    }
+    override fun getEventData(): WritableMap? {
+      return eventData
+    }
+    override fun getCoalescingKey(): Short {
+      return 0
+    }
+  }
+
+  private class MapPressEvent(viewTag: Int, private val eventData: WritableMap?) : Event<MapPressEvent>(viewTag) {
+    override fun getEventName(): String {
+      return "onMapPress"
+    }
+    override fun getEventData(): WritableMap? {
+      return eventData
+    }
+    override fun getCoalescingKey(): Short {
+      return 0
+    }
+  }
+
+  private class MapLongPressEvent(viewTag: Int, private val eventData: WritableMap?) : Event<MapLongPressEvent>(viewTag) {
+    override fun getEventName(): String {
+      return "onMapLongPress"
     }
     override fun getEventData(): WritableMap? {
       return eventData

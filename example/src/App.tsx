@@ -16,6 +16,8 @@ export default function App() {
     onMapLoaded,
     onCameraPositionChange,
     onCameraPositionChangeEnd,
+    onMapPress,
+    onMapLongPress,
   } = useMap();
 
   return (
@@ -27,6 +29,8 @@ export default function App() {
         onMapLoaded={onMapLoaded}
         onCameraPositionChange={onCameraPositionChange}
         onCameraPositionChangeEnd={onCameraPositionChangeEnd}
+        onMapPress={onMapPress}
+        onMapLongPress={onMapLongPress}
         zoomGesturesEnabled={false}
         scrollGesturesEnabled={false}
         tiltGesturesEnabled={false}
@@ -62,6 +66,8 @@ export default function App() {
         onMapLoaded={onMapLoaded}
         onCameraPositionChange={onCameraPositionChange}
         onCameraPositionChangeEnd={onCameraPositionChangeEnd}
+        onMapPress={onMapPress}
+        onMapLongPress={onMapLongPress}
         zoomGesturesEnabled={false}
         scrollGesturesEnabled={false}
         tiltGesturesEnabled={false}

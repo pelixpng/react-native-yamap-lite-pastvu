@@ -8,6 +8,8 @@ public protocol YamapViewComponentDelegate {
     func handleOnMapLoaded(result: [String: Any])
     func handleOnCameraPositionChange(coords: [String: Any])
     func handleOnCameraPositionChangeEnd(coords: [String: Any])
+    func handleOnMapPress(coords: [String: Any])
+    func handleOnMapLongPress(coords: [String: Any])
 }
 
 @objc(YamapView)
@@ -32,6 +34,7 @@ public class YamapView: UIView {
 
     private var cameraListener: CameraListener?
     private var loadListener: MapLoadListener?
+    private var mapInputListener: MapInputListener?
     private var userLocationListener: UserLocationObjectListener?
     private var userLocationLayer: YMKUserLocationLayer!
     private var userLocationImage: UIImage?
@@ -167,6 +170,11 @@ public class YamapView: UIView {
             let cameraDelegate = CameraListener(callback: nil, delegate: delegate)
             cameraListener = cameraDelegate
             map.addCameraListener(with: cameraDelegate)
+        }
+        
+        if mapInputListener == nil {
+            mapInputListener = MapInputListener(delegate: delegate)
+            map.addInputListener(with: mapInputListener!)
         }
         
         if userLocationListener == nil {
