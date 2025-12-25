@@ -136,6 +136,22 @@ public class ClusteredYamapView: YamapView {
   collection.clusterPlacemarks(withClusterRadius: 50, minZoom: 12)
 }
   
+  @objc override public func fitAllMarkers() {
+    var markerPoints: [YMKPoint] = []
+    
+    for placemark in placemarks {
+      if placemark.isValid {
+        markerPoints.append(placemark.geometry)
+      }
+    }
+    
+    if markerPoints.isEmpty {
+      return
+    }
+    
+    fitMakers(markerPoints)
+  }
+  
   @objc public func clusterImage(clusterSize: Int) -> UIImage? {
     let text = NSString(string: String(clusterSize))
     let font: UIFont = UIFont.systemFont(ofSize: FONT_SIZE)
