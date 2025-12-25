@@ -246,6 +246,28 @@ using namespace facebook::react;
   }
 }
 
+- (void)handleOnMapPressWithCoords:(NSDictionary *)coords {
+  if (_eventEmitter != nil) {
+    ClusteredYamapLiteViewEventEmitter::OnMapPress event = {};
+    event.lat = [[coords objectForKey:@"lat"] doubleValue];
+    event.lon = [[coords objectForKey:@"lon"] doubleValue];
+    std::dynamic_pointer_cast<const ClusteredYamapLiteViewEventEmitter>(
+        _eventEmitter)
+        ->onMapPress(event);
+  }
+}
+
+- (void)handleOnMapLongPressWithCoords:(NSDictionary *)coords {
+  if (_eventEmitter != nil) {
+    ClusteredYamapLiteViewEventEmitter::OnMapLongPress event = {};
+    event.lat = [[coords objectForKey:@"lat"] doubleValue];
+    event.lon = [[coords objectForKey:@"lon"] doubleValue];
+    std::dynamic_pointer_cast<const ClusteredYamapLiteViewEventEmitter>(
+        _eventEmitter)
+        ->onMapLongPress(event);
+  }
+}
+
 - (void)mountChildComponentView:
             (nonnull UIView<RCTComponentViewProtocol> *)childComponentView
                           index:(NSInteger)index {
@@ -259,7 +281,10 @@ using namespace facebook::react;
 - (void)unmountChildComponentView:
             (nonnull UIView<RCTComponentViewProtocol> *)childComponentView
                             index:(NSInteger)index {
-  // TODO:
+  if ([childComponentView isKindOfClass:YamapLiteMarkerView.class] ||
+      [childComponentView isKindOfClass:YamapLiteCircleView.class]) {
+    [childComponentView removeFromSuperview];
+  }
 }
 
 Class<RCTComponentViewProtocol> ClusteredYamapLiteViewCls(void) {

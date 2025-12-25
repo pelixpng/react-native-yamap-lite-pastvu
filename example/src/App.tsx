@@ -25,16 +25,18 @@ export default function App() {
         style={styles.box}
         initialRegion={{ lat: 55.551244, lon: 36.518423, zoom: 10 }}
         onMapLoaded={onMapLoaded}
-        clusterColor="#2cc"
+        clusterColor="#ff00ff"
         onCameraPositionChange={onCameraPositionChange}
         onCameraPositionChangeEnd={onCameraPositionChangeEnd}
+        onMapPress={onMapPress}
+        onMapLongPress={onMapLongPress}
         // zoomGesturesEnabled={false}
         // scrollGesturesEnabled={false}
         // tiltGesturesEnabled={false}
         // rotateGesturesEnabled={false}
-        fastTapEnabled={false}
-        nightMode={false}
-        showUserPosition={true}
+        // fastTapEnabled={false}
+        // nightMode={false}
+        // showUserPosition={true}
         userLocationIcon={require('./assets/user-pin.png')}
         userLocationIconScale={1.5}
         userLocationAccuracyFillColor="#ff0000"
@@ -47,10 +49,8 @@ export default function App() {
           <Marker
             key={`${point.lat}-${point.lon}-${data.index}`}
             point={point}
-            // source={{ uri: data.source }}
-            source={require('./assets/user-pin.png')}
+            source={{ uri: data.source }}
             size={data.size}
-            scale={1}
           />
         )}
         clusteredMarkers={markers.map((marker) => ({
@@ -65,8 +65,10 @@ export default function App() {
         onMapLoaded={onMapLoaded}
         onCameraPositionChange={onCameraPositionChange}
         onCameraPositionChangeEnd={onCameraPositionChangeEnd}
-        // zoomGesturesEnabled={false}
-        // scrollGesturesEnabled={false}
+        onMapPress={onMapPress}
+        onMapLongPress={onMapLongPress}
+        zoomGesturesEnabled={false}
+        scrollGesturesEnabled={false}
         tiltGesturesEnabled={false}
         rotateGesturesEnabled={false}
         fastTapEnabled={false}
@@ -84,30 +86,12 @@ export default function App() {
         followUser={true}
       >
         {markers.map((marker, index) => (
-          // <Circle
-          //   key={`${marker.lat}-${marker.lon}-${index}`}
-          //   center={{ lat: marker.lat, lon: marker.lon }}
-          //   radius={10000}
-          //   fillColor="#0000ff"
-          //   strokeColor="#ff0000"
-          //   strokeWidth={10}
-          //   zInd={1000}
-          //   // point={{ lat: marker.lat, lon: marker.lon }}
-          //   // source={{ uri: marker.source }}
-          //   onPress={(event) => {
-          //     Alert.alert('m');
-          //     console.log('Marker pressed', event);
-          //   }}
-          // />
           <Marker
             key={`${marker.lat}-${marker.lon}-${index}`}
             point={{ lat: marker.lat, lon: marker.lon }}
-            size={5000000}
-            zInd={1000}
-            source={require('./assets/user-pin.png')}
-            // source={{ uri: './assets/user-pin.png' }}
+            source={{ uri: marker.source }}
+            size={marker.size}
             onPress={(event) => {
-              Alert.alert('d');
               console.log('Marker pressed', event);
             }}
           />

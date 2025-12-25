@@ -27,7 +27,8 @@ class ClusteredYamapLiteViewManager : ViewGroupManager<ClusteredYamapLiteView>()
   }
 
   override fun addView(parent: ClusteredYamapLiteView, child: View, index: Int) {
-    parent.addReactChild(child, index)
+    parent.addChild(child, index)
+    super.addView(parent, child, index)
   }
 
   override fun getChildAt(parent: ClusteredYamapLiteView, index: Int): View {
@@ -39,10 +40,8 @@ class ClusteredYamapLiteViewManager : ViewGroupManager<ClusteredYamapLiteView>()
   }
 
   override fun removeViewAt(parent: ClusteredYamapLiteView, index: Int) {
-    val childCount = parent.getReactChildCount()
-    if (index >= 0 && index < childCount) {
-      parent.removeReactChildAt(index)
-    }
+    parent.removeChild(index)
+    super.removeViewAt(parent, index)
   }
 
   override fun getName() = "ClusteredYamapLiteView"

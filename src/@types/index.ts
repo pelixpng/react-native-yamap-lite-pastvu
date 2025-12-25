@@ -121,6 +121,7 @@ export interface ClusteredYamapProps<T = any> extends YaMapProps {
     info: { point: Point; data: T },
     index: number
   ) => React.ReactElement;
+  /** @default #FF0000 */
   clusterColor?: string;
 }
 

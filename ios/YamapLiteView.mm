@@ -225,7 +225,10 @@ using namespace facebook::react;
 }
 
 - (void)unmountChildComponentView:(nonnull UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index { 
-//TODO:
+  if ([childComponentView isKindOfClass:YamapLiteMarkerView.class] ||
+      [childComponentView isKindOfClass:YamapLiteCircleView.class]) {
+    [childComponentView removeFromSuperview];
+  }
 }
 
 Class<RCTComponentViewProtocol> YamapLiteViewCls(void)
