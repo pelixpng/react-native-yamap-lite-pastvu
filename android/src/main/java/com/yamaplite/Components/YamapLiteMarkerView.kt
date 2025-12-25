@@ -50,6 +50,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
     placemark = obj
     placemark?.userData = this
     placemark?.addTapListener(this)
+    placemark?.isVisible = false
     applyStyle()
   }
 
@@ -123,17 +124,21 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
 
   fun setChildView(view: View?) {
     if (view == null) {
-        _childView!!.removeOnLayoutChangeListener(childLayoutListener)
+        _childView?.removeOnLayoutChangeListener(childLayoutListener)
         _childView = null
         applyStyle()
         return
     }
     _childView = view
     _childView!!.addOnLayoutChangeListener(childLayoutListener)
+    if (_childView!!.width > 0 && _childView!!.height > 0) {
+      applyStyle()
+    }
   }
 
   private fun applyStyle() {
     if (placemark != null && placemark!!.isValid) {
+      (placemark as PlacemarkMapObject).isVisible = false
       val iconStyle = IconStyle()
       iconStyle.setScale(markerScale.toFloat())
       iconStyle.setRotationType(if (_rotated) RotationType.ROTATE else RotationType.NO_ROTATION)
@@ -143,7 +148,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
       (placemark as PlacemarkMapObject).zIndex = zInd.toFloat()
       (placemark as PlacemarkMapObject).setIconStyle(iconStyle)
 
-      if (_childView != null) {
+      if (_childView != null && _childView!!.width > 0 && _childView!!.height > 0) {
         try {
           val b = Bitmap.createBitmap(
             _childView!!.width, _childView!!.height, Bitmap.Config.ARGB_8888
@@ -153,6 +158,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
           val resizedBitmap = ResolveImageHelper.getInstance().resizeBitmap(context, b, _size)
           (placemark as PlacemarkMapObject).setIcon(ImageProvider.fromBitmap(resizedBitmap))
           (placemark as PlacemarkMapObject).setIconStyle(iconStyle)
+          (placemark as PlacemarkMapObject).isVisible = isVisibleFlag
         } catch (e: Exception) {
           e.printStackTrace()
         }
@@ -166,6 +172,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
               if (pm.isValid) {
                 pm.setIcon(it)
                 currentIconStyle.let { pm.setIconStyle(it) }
+                pm.isVisible = isVisibleFlag
               }
             }
           }

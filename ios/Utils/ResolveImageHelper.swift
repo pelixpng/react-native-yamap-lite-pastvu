@@ -151,7 +151,7 @@ public class ResolveImageHelper {
         guard image.size.width > 0 && image.size.height > 0 else {
             return image
         }
-        
+
         // Сохраняем пропорции: ширина = size.width, высота рассчитывается пропорционально
         let scaleFactor = size.width / image.size.width
         let targetHeight = image.size.height * scaleFactor

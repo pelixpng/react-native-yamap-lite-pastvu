@@ -20,7 +20,7 @@ import kotlin.math.sqrt
 class ClusteredYamapLiteView(context: Context) : YamapLiteView(context), ClusterListener,
 ClusterTapListener {
   private var clusterCollection: ClusterizedPlacemarkCollection
-  private var clusterColor = 0
+  private var clusterColor = Color.RED
   private val placemarksMap: HashMap<String?, PlacemarkMapObject?> = HashMap<String?, PlacemarkMapObject?>()
   private var pointsList = ArrayList<Point>()
 
@@ -83,6 +83,27 @@ ClusterTapListener {
     clusterCollection.clusterPlacemarks(50.0, 12)
   }
 
+  fun addChild(child: View, index: Int) {
+    super.addReactChild(child, index)
+    if (child is YamapLiteMarkerView) {
+      val placemark = placemarksMap["" + child.latitude + child.longitude]
+      if (placemark != null) {
+        child.setMarkerMapObject(placemark)
+      }
+    }
+  }
+
+  fun removeChild(index: Int) {
+    val child = getChildAt(index)
+    if (child is YamapLiteMarkerView) {
+      val mapObject = child.placemark
+      if (mapObject != null && mapObject.isValid) {
+        clusterCollection.remove(mapObject)
+        placemarksMap.remove("" + child.latitude + child.longitude)
+      }
+    }
+  }
+
   override fun onClusterAdded(cluster: Cluster) {
     cluster.appearance.setIcon(TextImageProvider(cluster.size.toString()))
     cluster.addClusterTapListener(this)
@@ -103,8 +124,14 @@ ClusterTapListener {
     }
 
     override fun getImage(): Bitmap {
+      // Scale sizes by display density to match iOS (which uses points that scale automatically)
+      val density = this@ClusteredYamapLiteView.context.resources.displayMetrics.density
+      val scaledFontSize = Companion.FONT_SIZE * density
+      val scaledMarginSize = Companion.MARGIN_SIZE * density
+      val scaledStrokeSize = Companion.STROKE_SIZE * density
+      
       val textPaint = Paint()
-      textPaint.textSize = Companion.FONT_SIZE
+      textPaint.textSize = scaledFontSize
       textPaint.textAlign = Paint.Align.CENTER
       textPaint.style = Paint.Style.FILL
       textPaint.isAntiAlias = true
@@ -113,8 +140,8 @@ ClusterTapListener {
       val textMetrics = textPaint.fontMetrics
       val heightF = (abs(textMetrics.bottom.toDouble()) + abs(textMetrics.top.toDouble())).toFloat()
       val textRadius = sqrt((widthF * widthF + heightF * heightF).toDouble()).toFloat() / 2
-      val internalRadius = textRadius + Companion.MARGIN_SIZE
-      val externalRadius = internalRadius + Companion.STROKE_SIZE
+      val internalRadius = textRadius + scaledMarginSize
+      val externalRadius = internalRadius + scaledStrokeSize
 
       val width = (2 * externalRadius + 0.5).toInt()
 

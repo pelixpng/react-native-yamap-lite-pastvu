@@ -1,10 +1,8 @@
-import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { YaMap, Marker, Circle } from 'react-native-yamap-lite';
+import { Marker, ClusteredYamap } from 'react-native-yamap-lite';
 import { markers } from './constants/markers';
 import { useMap } from './hooks/useMap';
 import { ControlPanel } from './components/ControlPanel';
-
 export default function App() {
   const {
     mapRef,
@@ -22,22 +20,23 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* <ClusteredYamap
+      <ClusteredYamap
         ref={mapRef}
         style={styles.box}
         initialRegion={{ lat: 55.551244, lon: 36.518423, zoom: 10 }}
         onMapLoaded={onMapLoaded}
+        clusterColor="#ff00ff"
         onCameraPositionChange={onCameraPositionChange}
         onCameraPositionChangeEnd={onCameraPositionChangeEnd}
         onMapPress={onMapPress}
         onMapLongPress={onMapLongPress}
-        zoomGesturesEnabled={false}
-        scrollGesturesEnabled={false}
-        tiltGesturesEnabled={false}
-        rotateGesturesEnabled={false}
-        fastTapEnabled={false}
-        nightMode={true}
-        showUserPosition={true}
+        // zoomGesturesEnabled={false}
+        // scrollGesturesEnabled={false}
+        // tiltGesturesEnabled={false}
+        // rotateGesturesEnabled={false}
+        // fastTapEnabled={false}
+        // nightMode={false}
+        // showUserPosition={true}
         userLocationIcon={require('./assets/user-pin.png')}
         userLocationIconScale={1.5}
         userLocationAccuracyFillColor="#ff0000"
@@ -58,8 +57,8 @@ export default function App() {
           point: marker,
           data: marker,
         }))}
-      /> */}
-      <YaMap
+      />
+      {/* <YaMap
         ref={mapRef}
         style={styles.box}
         initialRegion={{ lat: 55.551244, lon: 36.518423, zoom: 10 }}
@@ -73,7 +72,7 @@ export default function App() {
         tiltGesturesEnabled={false}
         rotateGesturesEnabled={false}
         fastTapEnabled={false}
-        nightMode={true}
+        nightMode={false}
         showUserPosition={true}
         userLocationIcon={{
           uri: 'https://www.shutterstock.com/image-vector/user-location-icon-vector-graphics-260nw-1496198948.jpg',
@@ -108,7 +107,7 @@ export default function App() {
             console.log('Circle pressed', event);
           }}
         />
-      </YaMap>
+      </YaMap> */}
       <ControlPanel
         handleIncreaseZoom={handleIncreaseZoom}
         handleDecreaseZoom={handleDecreaseZoom}
