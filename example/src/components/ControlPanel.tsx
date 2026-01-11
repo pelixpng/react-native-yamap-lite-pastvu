@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     gap: 10,
     position: 'absolute',
-    right: 20,
+    right: 10,
+    borderRadius: 10,
+    top: '30%',
+    backgroundColor: 'black',
+    padding: 10,
   },
 });
