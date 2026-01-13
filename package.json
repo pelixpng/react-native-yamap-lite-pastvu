@@ -2,13 +2,13 @@
   "name": "react-native-yamap-lite",
   "version": "1.0.0",
   "description": "A lightweight wrapper for the Yandex MapKit SDK",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "exports": {
     ".": {
       "source": "./src/index.tsx",
-      "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/module/index.js"
+      "types": "./src/index.tsx",
+      "default": "./src/index.tsx"
     },
     "./package.json": "./package.json"
   },
@@ -37,7 +37,6 @@
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
     "codegenIos": "yarn react-native codegen --path example/ --outputPath ./",
     "codegenAndroid": "yarn react-native codegen --path example/ --outputPath ./",
     "release": "release-it --only-version"

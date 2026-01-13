@@ -41,11 +41,17 @@ func application(
   _ application: UIApplication,
   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
 ) -> Bool {
-  // Initialize Yandex Maps BEFORE starting React Native
+
+  reactNativeDelegate = delegate
+  reactNativeFactory = factory
+
+  // Инициализуйте SDK Yandex Maps перед стартом React Native
   YMKMapKit.setLocale("ru_RU")
   YMKMapKit.setApiKey("YOUR_API_KEY")
   YMKMapKit.initialize()
   
+  window = UIWindow(frame: UIScreen.main.bounds)
+
   // ... остальной код инициализации
   
   return true
@@ -55,6 +61,8 @@ func application(
 ### Android
 
 Инициализируйте MapKit в методе `onCreate` класса `MainApplication`:
+
+**ВАЖНО:** Замените `YOUR_API_KEY` на ваш API ключ от Yandex MapKit.
 
 ```kotlin
 import com.yandex.mapkit.MapKitFactory
@@ -72,7 +80,14 @@ class MainApplication : Application() {
 }
 ```
 
-**ВАЖНО:** Замените `YOUR_API_KEY` на ваш API ключ от Yandex MapKit.
+Добавьте в вашем проекте зависимость в `android/app/build.gradle`
+
+```gradle
+dependencies {
+  implementation('com.yandex.android:maps.mobile:4.24.0-lite')
+  ...
+}
+```
 
 ## Использование
 
