@@ -6,17 +6,17 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.fbreact.specs.NativeYamapUtilsSpec
+import com.yamaplite.NativeYamapUtilsSpec
 import com.yamaplite.components.YamapLiteView
 
 @ReactModule(name = NativeYamapUtilsSpec.NAME)
 class YamapUtils(reactContext: ReactApplicationContext): NativeYamapUtilsSpec(reactContext) {
-    override fun getCameraPosition(viewId: Double, promise: Promise) { 
+    override fun getCameraPosition(viewId: Double, promise: Promise) {
         UiThreadUtil.runOnUiThread {
             try {
-                val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, viewId.toInt())
+                val uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), viewId.toInt())
                 val view = uiManager?.resolveView(viewId.toInt()) as? YamapLiteView
-                
+
                 if (view != null) {
                     val cameraPosition = view.getCameraPosition()
                     if (cameraPosition != null) {
@@ -44,9 +44,9 @@ class YamapUtils(reactContext: ReactApplicationContext): NativeYamapUtilsSpec(re
     override fun fitAllMarkers(viewId: Double, promise: Promise) {
         UiThreadUtil.runOnUiThread {
             try {
-                val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, viewId.toInt())
+                val uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), viewId.toInt())
                 val view = uiManager?.resolveView(viewId.toInt()) as? YamapLiteView
-                
+
                 if (view != null) {
                     view.fitAllMarkers()
                     promise.resolve(null)
@@ -62,9 +62,9 @@ class YamapUtils(reactContext: ReactApplicationContext): NativeYamapUtilsSpec(re
     override fun setZoom(viewId: Double, zoom: Double, duration: Double, animation: String, promise: Promise) {
         UiThreadUtil.runOnUiThread {
             try {
-                val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, viewId.toInt())
+                val uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), viewId.toInt())
                 val view = uiManager?.resolveView(viewId.toInt()) as? YamapLiteView
-                
+
                 if (view != null) {
                     view.setZoom(zoom.toFloat(), duration.toInt(), animation)
                     promise.resolve(null)
@@ -80,9 +80,9 @@ class YamapUtils(reactContext: ReactApplicationContext): NativeYamapUtilsSpec(re
     override fun setCenter(viewId: Double, latitude: Double, longitude: Double, zoom: Double, azimuth: Double, tilt: Double, duration: Double, animation: String, promise: Promise) {
         UiThreadUtil.runOnUiThread {
             try {
-                val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, viewId.toInt())
+                val uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), viewId.toInt())
                 val view = uiManager?.resolveView(viewId.toInt()) as? YamapLiteView
-                
+
                 if (view != null) {
                     view.setCenter(latitude, longitude, zoom.toFloat(), azimuth.toFloat(), tilt.toFloat(), duration.toInt(), animation)
                     promise.resolve(null)
