@@ -67,6 +67,12 @@ public class YamapLiteMarker: UIView, MapObjectTapHandler {
         }
     }
 
+    @objc public var rotation: Float = 0.0 {
+        didSet {
+            updateMarker()
+        }
+    }
+
     @objc public var size: Int = 25 {
         didSet {
             updateMarker()
@@ -149,7 +155,12 @@ public class YamapLiteMarker: UIView, MapObjectTapHandler {
             let anchorY = anchor?.y ?? 0.5
             iconStyle.anchor = NSValue(cgPoint: CGPoint(x: CGFloat(anchorX), y: CGFloat(anchorY)))
 
-            iconStyle.rotationType = NSNumber(value: YMKRotationType.rotate.rawValue)
+            if rotation != 0.0 {
+                iconStyle.rotationType = NSNumber(value: YMKRotationType.rotate.rawValue)
+                obj.direction = rotation
+            } else {
+                iconStyle.rotationType = NSNumber(value: rotated != 0 ? YMKRotationType.rotate.rawValue : YMKRotationType.noRotation.rawValue)
+            }
 
             if let icon = originalIcon {
               let resizedIcon = ResolveImageHelper.shared.resizeImage(icon, toSize: CGSize(width: size, height: size))

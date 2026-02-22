@@ -16,6 +16,7 @@ export interface NativeProps extends ViewProps {
   zInd?: Int32;
   scale?: Double;
   rotated?: boolean;
+  rotation?: Double;
   onMarkerPress?: DirectEventHandler<Readonly<Point>>;
   source?: string;
   anchor?: {

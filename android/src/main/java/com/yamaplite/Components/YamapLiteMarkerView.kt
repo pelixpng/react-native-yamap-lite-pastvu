@@ -35,6 +35,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
   var anchorX: Double = 0.5
   var anchorY: Double = 0.5
   private var _rotated: Boolean = false
+  private var _rotation: Float = 0f
   private var _handled: Boolean = false
   private var _size: Int = 25
   private var _childView: View? = null
@@ -109,6 +110,11 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
     applyStyle()
   }
 
+  fun setRotation(value: Float) {
+    _rotation = value
+    applyStyle()
+  }
+
   fun setHandled(value: Boolean) {
     _handled = value
   }
@@ -141,11 +147,14 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
       (placemark as PlacemarkMapObject).isVisible = false
       val iconStyle = IconStyle()
       iconStyle.setScale(markerScale.toFloat())
-      iconStyle.setRotationType(if (_rotated) RotationType.ROTATE else RotationType.NO_ROTATION)
+      iconStyle.setRotationType(if (_rotation != 0f || _rotated) RotationType.ROTATE else RotationType.NO_ROTATION)
       iconStyle.setVisible(isVisibleFlag)
       iconStyle.setAnchor(PointF(anchorX.toFloat(), anchorY.toFloat()))
       (placemark as PlacemarkMapObject).geometry = Point(latitude, longitude)
       (placemark as PlacemarkMapObject).zIndex = zInd.toFloat()
+      if (_rotation != 0f) {
+        (placemark as PlacemarkMapObject).direction = _rotation
+      }
       (placemark as PlacemarkMapObject).setIconStyle(iconStyle)
 
       if (_childView != null && _childView!!.width > 0 && _childView!!.height > 0) {

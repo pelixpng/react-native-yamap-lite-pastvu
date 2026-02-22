@@ -29,6 +29,7 @@ export interface MarkerProps extends ViewProps {
   zInd?: number;
   scale?: number;
   rotated?: boolean;
+  rotation?: number;
   onPress?: (event: Point) => void;
   source?: ImageSourcePropType;
   anchor?: {
