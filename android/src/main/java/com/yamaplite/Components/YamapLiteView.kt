@@ -160,7 +160,11 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
   fun setMaxFps(fps: Float) {
     maxFps = fps
   }
-  
+
+  fun setMinZoomPreference(minZoom: Float) {
+    mapView.mapWindow.map.setMinZoomPreference(minZoom)
+  }
+
   fun setMapType(type: String?) {
     mapType = type ?: "map"
   }

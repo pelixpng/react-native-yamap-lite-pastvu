@@ -91,6 +91,7 @@ export interface NativeProps extends ViewProps {
   followUser?: boolean;
   logoPosition?: YandexLogoPosition;
   logoPadding?: YandexLogoPadding;
+  minZoomPreference?: Float;
 }
 
 export type YamapViewComponent = HostComponent<NativeProps>;

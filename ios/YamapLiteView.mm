@@ -81,6 +81,7 @@ using namespace facebook::react;
         [self->_view setLogoPositionWithPosition:logoPositionDict];
         [self->_view setLogoPaddingWithVertical:newViewProps.logoPadding.vertical horizontal:newViewProps.logoPadding.horizontal];
         self->_view.maxFps = newViewProps.maxFps;
+        self->_view.minZoomPreference = newViewProps.minZoomPreference;
         [self->_view applyProperties];
     });
     

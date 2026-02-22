@@ -135,6 +135,13 @@ public class YamapView: UIView {
         }
     }
 
+    @objc public var minZoomPreference: Float = 0 {
+        didSet {
+            guard let map = mapView?.mapWindow?.map else { return }
+            map.cameraBounds.setMinZoomPreferenceWithZoom(minZoomPreference)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         initImpl()

@@ -114,6 +114,8 @@ export interface YaMapProps extends ViewProps {
   logoPosition?: YandexLogoPosition;
 
   logoPadding?: YandexLogoPadding;
+
+  minZoomPreference?: number;
 }
 
 export interface ClusteredYamapProps<T = any> extends YaMapProps {

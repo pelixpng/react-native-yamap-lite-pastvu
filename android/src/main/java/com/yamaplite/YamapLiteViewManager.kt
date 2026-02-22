@@ -113,6 +113,11 @@ class YamapLiteViewManager : ViewGroupManager<YamapLiteView>(), YamapLiteViewMan
     view.setMaxFps(value)
   }
 
+  @ReactProp(name = "minZoomPreference")
+  override fun setMinZoomPreference(view: YamapLiteView, value: Float) {
+    view.setMinZoomPreference(value)
+  }
+
   @ReactProp(name = "mapType")
   override fun setMapType(view: YamapLiteView, value: String?) {
     view.setMapType(value)
