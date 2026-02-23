@@ -21,6 +21,12 @@ public class ResolveImageHelper {
             return nil
         }
         
+        // Нативные ассеты Xcode (xcassets)
+        if let namedImage = UIImage(named: uri as String) {
+            completion?(namedImage)
+            return namedImage
+        }
+
         // Локальные файлы загружаем синхронно
         if uri.hasPrefix("file://") || uri.hasPrefix("/") {
           var url = URL(string: uri as String)
