@@ -471,6 +471,16 @@ public class YamapView: UIView {
         }
     }
 
+    @objc public func removeMarkerSubview(_ subview: UIView) {
+        if let markerView = subview.value(forKey: "contentView") as? YamapLiteMarker {
+            if let mapObject = markerView.mapObject {
+                mapView.mapWindow.map.mapObjects.remove(with: mapObject)
+                markerView.mapObject = nil
+            }
+            mapObjects.removeAll(where: { $0 === markerView })
+        }
+    }
+
     func runOnMainThread(_ block: @escaping () -> Void) {
         if Thread.isMainThread { block() } else { DispatchQueue.main.async { block() } }
     }

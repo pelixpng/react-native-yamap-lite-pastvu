@@ -281,8 +281,10 @@ using namespace facebook::react;
 - (void)unmountChildComponentView:
             (nonnull UIView<RCTComponentViewProtocol> *)childComponentView
                             index:(NSInteger)index {
-  if ([childComponentView isKindOfClass:YamapLiteMarkerView.class] ||
-      [childComponentView isKindOfClass:YamapLiteCircleView.class]) {
+  if ([childComponentView isKindOfClass:YamapLiteMarkerView.class]) {
+    [_view removeMarkerSubview:childComponentView];
+    [childComponentView removeFromSuperview];
+  } else if ([childComponentView isKindOfClass:YamapLiteCircleView.class]) {
     [childComponentView removeFromSuperview];
   }
 }
