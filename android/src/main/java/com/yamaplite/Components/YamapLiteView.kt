@@ -162,7 +162,11 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
   }
 
   fun setMinZoomPreference(minZoom: Float) {
-    mapView.mapWindow.map.setMinZoomPreference(minZoom)
+    try {
+      mapView.mapWindow.map.javaClass.getMethod("setMinZoomPreference", Float::class.javaPrimitiveType).invoke(mapView.mapWindow.map, minZoom)
+    } catch (_: Exception) {
+      // setMinZoomPreference not available in this Yandex MapKit version
+    }
   }
 
   fun setMapType(type: String?) {

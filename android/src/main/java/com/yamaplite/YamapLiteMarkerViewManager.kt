@@ -66,8 +66,8 @@ class YamapLiteMarkerViewManager : SimpleViewManager<YamapLiteMarkerView>(), Yam
   }
 
   @ReactProp(name = "rotation")
-  override fun setRotation(view: YamapLiteMarkerView, value: Float) {
-    view.setRotation(value)
+  override fun setRotation(view: YamapLiteMarkerView, value: Double) {
+    view.setMarkerRotation(value.toFloat())
   }
   
   @ReactProp(name = "handled")

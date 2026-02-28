@@ -110,7 +110,7 @@ class YamapLiteMarkerView(context: Context) : View(context), MapObjectTapListene
     applyStyle()
   }
 
-  fun setRotation(value: Float) {
+  fun setMarkerRotation(value: Float) {
     _rotation = value
     applyStyle()
   }
