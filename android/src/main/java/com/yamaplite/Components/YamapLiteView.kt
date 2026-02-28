@@ -71,6 +71,7 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
   private var logoPosition: Map<String, Any>? = null
   private var logoPadding: Map<String, Any>? = null
   private var userLocationView: UserLocationView? = null
+  private var _minZoomPreference: Float = 0f
 
   init {
     setupMap()
@@ -162,11 +163,7 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
   }
 
   fun setMinZoomPreference(minZoom: Float) {
-    try {
-      mapView.mapWindow.map.javaClass.getMethod("setMinZoomPreference", Float::class.javaPrimitiveType).invoke(mapView.mapWindow.map, minZoom)
-    } catch (_: Exception) {
-      // setMinZoomPreference not available in this Yandex MapKit version
-    }
+    _minZoomPreference = minZoom
   }
 
   fun setMapType(type: String?) {
@@ -432,6 +429,12 @@ open class YamapLiteView(context: Context) : FrameLayout(context), MapLoadedList
     reason: CameraUpdateReason,
     finished: Boolean
   ) {
+    if (finished && _minZoomPreference > 0f && cameraPosition.zoom < _minZoomPreference) {
+      val snapped = CameraPosition(cameraPosition.target, _minZoomPreference, cameraPosition.azimuth, cameraPosition.tilt)
+      map.move(snapped, Animation(Animation.Type.SMOOTH, 0.2f), null)
+      return
+    }
+
     val reactContext = context as? ReactContext
     if (reactContext == null) {
       return
