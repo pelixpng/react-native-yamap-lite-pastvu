@@ -41,17 +41,6 @@ export interface MarkerProps extends ViewProps {
   size?: number;
 }
 
-export interface CircleProps extends ViewProps {
-  fillColor?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
-  zInd?: number;
-  onPress?: (event: Point) => void;
-  center: Point;
-  radius: number;
-  handled?: boolean;
-}
-
 export interface YaMapProps extends ViewProps {
   userLocationIcon?: ImageSourcePropType;
 

@@ -1,6 +1,5 @@
 #import "YamapLiteView.h"
 #include "YamapLiteMarkerView.h"
-#include "YamapLiteCircleView.h"
 #include <Foundation/Foundation.h>
 #include "ReactCodegen/react/renderer/components/YamapLiteViewSpec/EventEmitters.h"
 #include <objc/NSObject.h>
@@ -220,16 +219,11 @@ using namespace facebook::react;
     if ([childComponentView isKindOfClass:YamapLiteMarkerView.class]) {
         [_view insertReactSubview:childComponentView atIndex:index];
     }
-    if ([childComponentView isKindOfClass:YamapLiteCircleView.class]) {
-        [_view insertReactSubview:childComponentView atIndex:index];
-    }
 }
 
 - (void)unmountChildComponentView:(nonnull UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index {
   if ([childComponentView isKindOfClass:YamapLiteMarkerView.class]) {
     [_view removeMarkerSubview:childComponentView];
-    [childComponentView removeFromSuperview];
-  } else if ([childComponentView isKindOfClass:YamapLiteCircleView.class]) {
     [childComponentView removeFromSuperview];
   }
 }

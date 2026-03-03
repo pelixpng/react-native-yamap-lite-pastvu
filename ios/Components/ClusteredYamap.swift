@@ -57,28 +57,18 @@ public class ClusteredYamapView: YamapView {
   }
   
   @objc override public func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-  let isMarker = !(subview is YMKMapView) && 
+  let isMarker = !(subview is YMKMapView) &&
                  subview.responds(to: Selector(("contentView"))) &&
                  (subview.value(forKey: "contentView") as? YamapLiteMarker) != nil
-  
-  let isCircle = !(subview is YMKMapView) &&
-                 subview.responds(to: Selector(("contentView"))) &&
-                 (subview.value(forKey: "contentView") as? YamapLiteCircle) != nil
-  
+
   if isMarker {
     let safeIndex = min(atIndex, subviews.count)
     insertSubview(subview, at: safeIndex)
-    
-    
     if let markerView = subview.value(forKey: "contentView") as? YamapLiteMarker {
-      
       if atIndex < placemarks.count {
         markerView.setClusterMapObject(placemarks[atIndex])
       }
     }
-  } else if isCircle {
-    let safeIndex = min(atIndex, subviews.count)
-    super.insertReactSubview(subview, at: safeIndex)
   } else {
     let safeIndex = min(atIndex, subviews.count)
     super.insertReactSubview(subview, at: safeIndex)

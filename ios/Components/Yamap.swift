@@ -461,14 +461,6 @@ public class YamapView: UIView {
             // }
         }
 
-        else if let circleContainer = subview as? UIView {
-            let cv = circleContainer.value(forKey: "contentView")
-            if let circleView = circleContainer.value(forKey: "contentView") as? YamapLiteCircle {
-                let mapObjects = mapView.mapWindow.map.mapObjects
-                let circleObject = mapObjects.addCircle(with: circleView.circle)
-                circleView.setMapObject(object: circleObject)
-            }
-        }
     }
 
     @objc public func removeMarkerSubview(_ subview: UIView) {

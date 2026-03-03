@@ -12,7 +12,6 @@ class YamapLiteViewPackage : ReactPackage {
     return listOf(
       YamapLiteViewManager() as ViewManager<*, *>,
       YamapLiteMarkerViewManager() as ViewManager<*, *>,
-      YamapLiteCircleViewManager() as ViewManager<*, *>,
       ClusteredYamapLiteViewManager() as ViewManager<*, *>
     )
   }
